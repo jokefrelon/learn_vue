@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Vue</title>
+</head>
+<body>
+	<div id="niubi">
+		{{welcome}}<br>
+		<input type="text" placeholder="随便写点啥吧!" v-model=welcome>
+		<input type="text" placeholder="随便写点啥吧!" v-model=dabo>
+		<p>{{fullname}}</p>
+	</div>
+
+<script type="text/javascript" src="vue.js"></script>
+
+<script>
+Vue.config.productionTip=false
+Vue.config.devtools=false
+const vapp = new Vue({
+	data(){
+		return{
+			welcome:"欢迎学习Vue 2.0!",
+			dabo:"Jack"
+		}
+	},
+	methods:{
+		// fullname(){
+		// 	console.log(this.welcome + "-" + this.dabo)
+		// }
+	},
+	computed:{
+		fullname:{
+			get(){
+				return this.welcome + '-' + this.dabo
+			}
+		}
+		// 可以简写为:fullname(){return this.welcome + '-' + this.dabo}//在没有set的情况哈
+	}
+})
+vapp.$mount("#niubi")
+
+</script>
+</body>
+</html>
