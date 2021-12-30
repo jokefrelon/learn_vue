@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="bobp">
+        <P>今天是个好日子啊!天气{{weatherQ}}</P>
+		<button @click="turnWeather()">点我</button>
+		<p>老Tom今年:{{dbqs.tom}}</p>
+		<button @click="dbqs.tom++">加一</button>
+    </div>
+    <script src="vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+        Vue.config.devtools = false
+        const shit = new Vue({
+            data() {
+                return {
+					temperature:true,
+					dbqs:{
+						tom:20,
+						jerry:19,
+						seapus:65
+					}
+                }
+            },
+            methods: {
+                turnWeather(){
+					// this.temperature == true ? this.temperature = false :this.temperature = true
+					this.temperature = !this.temperature
+                }
+            },
+            computed: {
+                weatherQ:{
+                    get(){
+                        return this.temperature ? "很热" : "凉爽"
+                    }
+                }
+            },
+			watch:{
+				
+				temperature(a,b){
+					console.log(a+"----"+b)
+				},
+				// "dbqs.tom":{
+				// 	handler(a,b){
+				// 		console.log(a+"----"+b)
+				// 	}
+				// },
+				dbqs:{
+					deep:true,
+					handler(a,b,c){
+						console.log(a.tom+"----"+b.tom)
+					}
+				}
+			},
+
+		})
+        shit.$mount("#bobp")
+    </script>
+</body>
+
+</html>
