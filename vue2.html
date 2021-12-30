@@ -4,8 +4,8 @@
 <head>
 	<style>
 		.basic {
-			width: 400px;
-			height: 200px;
+			width: 900px;
+			height: 700px;
 			border-radius: 30px;
 			border: 2px purple solid;
 			font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -30,7 +30,7 @@
 	<title>Document</title>
 </head>
 
-<body>
+<body style="background-color: #3b3b3b;">
 	<div id="bobp" class="basic" :class="color">
 		<P>今天是个好日子啊!天气{{weatherQ}}</P>
 		<button @click="turnWeather()">点我</button>
@@ -38,6 +38,17 @@
 		<button @click="dbqs.tom++">加一</button>
 		<hr style="width: 80%;margin-left: auto;margin-right: auto;margin-top: 3px;margin-bottom: 3px;">
 		<button @click="change">改变</button>
+		<p v-if="codelang[0] == 'Java'">{{codelang[0]}}</p>
+		<p v-else-if="codelang[1] == 'Python'">{{codelang[1]}}</p>
+		<p v-if="codelang[2] == 'Cpp'">{{codelang[2]}}</p>
+		<p v-else>{{codelang[3]}}</p>
+		<hr style="width: 80%;margin-left: auto;margin-right: auto;margin-top: 3px;margin-bottom: 3px;">
+		<button @click.once="adduser">click me!</button>
+		<ul style="list-style-type: none;margin:  auto;padding: 0;border: orange 1px solid;width: 80%;">
+			<li v-for="item in user" :key="item.uuid" style="margin-top: 5px;margin-bottom: 5px;">
+				{{item.name}} --- {{item.uuid}}<input type="text" :placeholder="item.name"> </li>
+		</ul>
+
 	</div>
 	<script src="vue.js"></script>
 	<script>
@@ -47,12 +58,18 @@
 			data() {
 				return {
 					temperature: true,
-					color: "day",
+					color: "night",
 					dbqs: {
 						tom: 20,
 						jerry: 19,
 						seapus: 65
-					}
+					},
+					codelang:["Java","Python","Cpp","Golang"],
+					user:[
+						{uuid:123,name:"lixuan",sex:0},
+						{uuid:124,name:"baiyu",sex:1},
+						{uuid:163,name:"liujing",sex:1},
+					],
 				}
 			},
 			methods: {
@@ -62,6 +79,12 @@
 				},
 				change() {
 					this.color == "day" ? this.color = "night" : this.color = "day"
+				},
+				adduser(){
+					// 这个函数在调用的 时候需要加上.once，否则会一直加人
+					this.user.unshift({uuid:156,name:"lixi",sex:1})
+					// unshift() 直接把数据干到最上面
+					// push() 数据加在最后面
 				}
 			},
 			computed: {

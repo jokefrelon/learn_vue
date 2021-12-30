@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<style>
+		.bk{
+			background-color: #2b2b2b;
+			color: #dbdbdb;
+		}
+		.er {
+			width: 300px;
+			height: 200px;
+			margin: 100px auto;
+			border: 1px rgb(104, 104, 104) solid;
+			border-radius: 10px;
+			box-shadow:  1px 1px 4px 1px cornflowerblue ;
+		}
+		.ipt{
+			background-color: #3f3f3f;
+		}
+		.ert{
+			width: 80%;
+			line-height: 30px;
+			margin:0 auto;
+			margin-top: 10px;
+			list-style: none;
+			border-radius:5px;
+			text-align: center;
+			padding: 0;
+		}
+		li{
+			width: 80%;
+			border-radius: 3px;
+			margin:4px auto;
+			background-color: #3f3f3f;
+			font-size: 14px;
+		}
+		li:hover{
+			border: 1px #caa155 solid;
+			margin: -1px auto;
+			font-size: 15px;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body class="bk">
+	<div class="er" id="kendaman">
+		<div class="ert">
+			<input class="ert ipt" type="text" placeholder="输入以搜索🔍" v-model="kw">
+		</div>
+		<ul class="ert">
+			<li v-for="it in userT" :key="it.uuid"> {{it.name}} </li>
+		</ul>
+	</div>
+	<script src="vue.js"></script>
+	<script>
+		Vue.config.productionTip = false
+		Vue.config.devtools = false
+		const vapp = new Vue({
+			data() {
+				return {
+					kw: '',
+					user: [
+						{ uuid: 123, name: "托塔天王", sex: 0 },
+						{ uuid: 124, name: "斗战胜佛", sex: 1 },
+						{ uuid: 163, name: "净坛使者", sex: 1 },
+						{ uuid: 165, name: "祥龙罗汉", sex: 1 }
+					], 
+				}
+			},
+			methods: {
+
+			},
+			computed: {
+				userT() {
+					return this.user.filter((u) => {
+						return u.name.indexOf(this.kw) !== -1
+					})
+				}
+			}
+			// watch: {
+			// 	kw: {
+			// 		immediate: true,
+			// 		handler(newkw) {
+			// 			this.userT = this.user.filter((u) => {
+			// 				return u.name.indexOf(newkw) !== -1
+			// 			})
+			// 		}
+			// 	}
+
+			// },
+		})
+		vapp.$mount("#kendaman")
+	</script>
+</body>
+
+</html>

@@ -311,6 +311,73 @@ methods: {
 
 下面的两种会用就可以,根据实际情况来,数组和对象一般用的不是很多
 
+### v-if
+
+```html
+<p v-if="codelang[0] == 'Java'">{{codelang[0]}}</p>
+<p v-else-if="codelang[1] == 'Python'">{{codelang[1]}}</p>
+<p v-if="codelang[2] == Cpp">{{codelang[2]}}</p>
+<p v-else>{{codelang[3]}}</p>
+```
+
+````js
+codelang:["Java","Python","Cpp","Golang"]
+````
+
+可以看的出来哈，`v-if`只会只要命中条件以后就会显示后面的内容而没有命中的条件都不不会出现。这里也没有啥难点，和别的语言的`if else`没有啥差别
+
+`<template>`标签只能与`v-if`一块用。其作用是不破坏dom结构。
+
+### v-for
+
+```html
+<ul style="list-style-type: none;margin:  auto;padding: 0;border: orange 1px solid;width: 80%;">
+	<li v-for="item in codelang" :key="index" style="margin-top: 5px;margin-bottom: 5px;">{{item}}</li>
+</ul>
+```
+
+下面就来一段具体操作
+
+```js
+const shit = new Vue({
+			data() {
+				return {
+					user:[
+						{uuid:123,name:"lx",sex:0},
+						{uuid:124,name:"by",sex:1},
+						{uuid:163,name:"lj",sex:1},
+					],
+				}
+			},
+			methods: {
+				adduser(){
+					// 这个函数在调用的 时候需要加上.once，否则会一直加人
+					this.user.unshift({uuid:156,name:"lx",sex:1})
+					// unshift() 直接把数据干到最上面
+					// push() 数据加在最后面
+				}
+			},
+})
+```
+
+```html
+<button @click.once="adduser">click me!</button>
+<ul>
+	<li v-for="item in user" :key="item.uuid" >{{item.name}} --- {{item.uuid}}
+    <input type="text" :placeholder="item.name"> </li>
+</ul>
+```
+
+### 箭头函数
+
+复习一下！看这里 [廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/1022910821149312/1031549578462080)
+
+### filter
+
+同上复习：[w3school](https://www.w3school.com.cn/jsref/jsref_filter.asp)
+
+
+
 
 
 ## 简单案例
@@ -381,4 +448,163 @@ shit.$mount("#bobp")
 ```
 
 通过计算属性拿到`temperature`以后在计算返回文字`weatherQ`,这更加人性化
+
+### 名称查找
+
+在input框内输入，下面的ul显示查询结果
+
+#### 1. Vue watch实现
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<div id="kendaman">
+		<input type="text" placeholder="输入以搜索🔍" v-model="kw">
+		<ul>
+			<li v-for="it in userT" :key="it.uuid"> {{it.name}} </li>
+		</ul>
+	</div>
+	<script src="vue.js"></script>
+	<script>
+		Vue.config.productionTip = false
+		Vue.config.devtools = false
+		const vapp = new Vue({
+			data() {
+				return {
+					kw: '',
+					user: [
+						{ uuid: 123, name: "托塔天王", sex: 0 },
+						{ uuid: 124, name: "斗战胜佛", sex: 1 },
+						{ uuid: 163, name: "净坛使者", sex: 1 },
+						{ uuid: 165, name: "祥龙罗汉", sex: 1 }
+					],
+					userT: [],
+				}
+			},
+			methods: {
+
+			},
+			watch: {
+				kw: {
+					immediate: true,
+					handler(newkw) {
+						this.userT = this.user.filter((u) => {
+							return u.name.indexOf(newkw) !== -1
+						})
+					}
+				}
+
+			},
+		})
+		vapp.$mount("#kendaman")
+	</script>
+</body>
+</html>
+```
+
+这里的一个小知识点是：`immediate`在初始化的时候就会执行一次，而此时，**kw**即我们的输入为空，**newkw**监视变化前的值也为空，**filter**在过滤的时候，匹配到空，是会返回0的而不是-1，匹配成功，因而最终返回**user**数组里面所有的数据给**userT**。众所周知js里面，任何字符串里都包含空字符串的。狗头保命！ 
+
+#### 2. Vue 计算属性实现
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<style>
+		.bk{
+			background-color: #2b2b2b;
+			color: #dbdbdb;
+		}
+		.er {
+			width: 300px;
+			height: 200px;
+			margin: 100px auto;
+			border: 1px rgb(104, 104, 104) solid;
+			border-radius: 10px;
+			box-shadow:  1px 1px 4px 1px cornflowerblue ;
+		}
+		.ipt{
+			background-color: #3f3f3f;
+		}
+		.ert{
+			width: 80%;
+			line-height: 30px;
+			margin:0 auto;
+			margin-top: 10px;
+			list-style: none;
+			border-radius:5px;
+			text-align: center;
+			padding: 0;
+		}
+		li{
+			width: 80%;
+			border-radius: 3px;
+			margin:4px auto;
+			background-color: #3f3f3f;
+			font-size: 14px;
+		}
+		li:hover{
+			border: 1px #caa155 solid;
+			margin: -1px auto;
+			font-size: 15px;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body class="bk">
+	<div class="er" id="kendaman">
+		<div class="ert">
+			<input class="ert ipt" type="text" placeholder="输入以搜索🔍" v-model="kw">
+		</div>
+		<ul class="ert">
+			<li v-for="it in userT" :key="it.uuid"> {{it.name}} </li>
+		</ul>
+	</div>
+	<script src="vue.js"></script>
+	<script>
+		Vue.config.productionTip = false
+		Vue.config.devtools = false
+		const vapp = new Vue({
+			data() {
+				return {
+					kw: '',
+					user: [
+						{ uuid: 123, name: "托塔天王", sex: 0 },
+						{ uuid: 124, name: "斗战胜佛", sex: 1 },
+						{ uuid: 163, name: "净坛使者", sex: 1 },
+						{ uuid: 165, name: "祥龙罗汉", sex: 1 }
+					], 
+				}
+			},
+			methods: {
+
+			},
+			computed: {
+				userT() {
+					return this.user.filter((u) => {
+						return u.name.indexOf(this.kw) !== -1
+					})
+				}
+			}
+		})
+		vapp.$mount("#kendaman")
+	</script>
+</body>
+
+</html>
+```
+
+**computed**里面有两个返回值可能比较搞心态，但是你只需要明白，第一个返回值是给**filter**做判断的，第二个返回值是给**userT**的就可以了，主要的原理和上面的一样，也是**filter**和**箭头函数**
 
