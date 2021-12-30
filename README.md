@@ -1,9 +1,5 @@
 # Vue
 
-[TOC]
-
-
-
 # 1. new to Vue
 
 ## 简单常识:
@@ -205,7 +201,64 @@ computed:{
 
 计算完成以后就可以直接调用了,有点像Linux里的 `alias`,给一些列操作定义一个名字,我调用这个名字就执行这个操作
 
+### 监视属性
 
+`watch`是一个用于监听数据变化的属性,他有一个方法`handler(new,old)`可以在监视的数据发生变化时做出相应的处理.其中new是改变后的数据,old是改变前的数据.
+
+`immediate:true`可以让数据在初始化的时候就开始监听,就是从无到有的过程也执行一次**handler()**
+
+还有一点需要注意的是,被监视的数据只能是 `data`和`computed`里面的.
+
+![image-20211230170345170](https://pics.jokeme.top/blogimas/image-20211230170345170.png)
+
+deep监视不能监视多层数据里面改变前的数据,只能拿到改变后的数据.
+
+```html
+<button @click="dbqs.tom++">加一</button>
+```
+
+```js
+watch:{
+	temperature:{
+		immediate:true,
+		handler(a,b){
+			console.log(a+"``"+b)
+		}
+	}
+},
+```
+
+除此之外**watch**还有一种**api**调用方法
+
+```js
+shit.$watch("temperature",{
+	immediate:true,
+	handler(a,b){
+		console.log(a+"``"+b)
+	}
+})
+```
+
+deep的用法
+
+```js
+dbqs:{
+	deep:true,
+	handler(a,b,c){
+		console.log(a.tom+"----"+b.tom)
+	}
+}
+```
+
+此外当你在监视的时候,用不到set,你可以用简写
+
+```js
+temperature(a,b){
+	console.log(a+"----"+b)
+},
+```
+
+直接就是你需要监视的数据变成函数名就可以了,handler有啥参数,这个简写就有啥.
 
 ## 简单案例
 
@@ -239,4 +292,40 @@ const vapp = new Vue({
 vapp.$mount("#niubi")
 </script>
 ```
+
+### 天气案例
+
+点击按钮切换今天的天气
+
+```html
+<div id="bobp">
+    <P>今天是个好日子啊!天气{{weatherQ}}</P>
+    <button @click="turnWeather()">点我</button>
+</div>
+```
+
+```js
+const shit = new Vue({
+    data() {
+        return {
+            temperature:true
+        }
+    },
+    methods: {
+        turnWeather(){
+            this.temperature == true ? this.temperature = false :this.temperature = true
+        }
+    },
+    computed: {
+    weatherQ:{
+        get(){
+            return this.temperature ? "很热" : "凉爽"
+        	}
+    	}
+	}
+})
+shit.$mount("#bobp")
+```
+
+通过计算属性拿到`temperature`以后在计算返回文字`weatherQ`,这更加人性化
 
