@@ -260,6 +260,59 @@ temperature(a,b){
 
 直接就是你需要监视的数据变成函数名就可以了,handler有啥参数,这个简写就有啥.
 
+### 绑定Class样式
+
+多说无益,先上代码
+
+```css
+.basic{
+	width: 400px;
+	height: 200px;
+	border: 2px tomato solid;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	margin-top: 30px;
+	text-align: center;
+}
+.day {
+	background-color: rgb(255, 255, 255);
+	color: rgb(26, 26, 26);
+}
+.night{
+	background-color: rgb(49, 49, 49);
+	color: rgb(226, 226, 226);
+}
+```
+
+```html
+<div id="bobp" class="basic" :class="color" >
+    <P>今天是个好日子啊!</P>
+	<p>老Tom今天在干嘛啊</p>
+	<hr style="width: 80%;margin-left: auto;margin-right: auto;margin-top: 3px;margin-bottom: 3px;">
+	<button @click="change">改变</button>
+</div>
+```
+
+```js
+data() {
+    return {
+		color:"day",
+},
+methods: {
+	change(){
+		this.color == "day" ?  this.color = "night" : this.color = "day"
+	}
+},
+
+```
+
+**原理:**`:class`绑定一个data里面的变量**color**,当你点击按钮的时候,就会做出判断,给原来的样式`basic` 后面再加上`day`/`night`样式
+
+![image-20211230195124370](https://pics.jokeme.top/blogimas/image-20211230195124370.png)
+
+下面的两种会用就可以,根据实际情况来,数组和对象一般用的不是很多
+
+
+
 ## 简单案例
 
 ### 姓名案例
