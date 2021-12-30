@@ -608,3 +608,6 @@ shit.$mount("#bobp")
 
 **computed**里面有两个返回值可能比较搞心态，但是你只需要明白，第一个返回值是给**filter**做判断的，第二个返回值是给**userT**的就可以了，主要的原理和上面的一样，也是**filter**和**箭头函数**
 
+![image](https://pics.jokeme.top/typora/image-20211231061310941.png)
+
+咱们来欣赏一下成果吧！暗黑模式真好看，我真厉害😜
