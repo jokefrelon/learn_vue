@@ -394,6 +394,27 @@ const shit = new Vue({
 
 [哔哩哔哩-尚硅谷-自定义指令](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=46)
 
+### 生命周期
+
+```js
+mounted() {
+	setInterval(() => {
+		this.opacity -= 0.01
+		if (this.opacity <= 0) {
+			a = Math.random(0, 1)
+			this.opacity = a
+			console.log(a)
+		}
+	}, 15)
+},
+```
+
+主要的函数都在这里
+
+![image-20220108040257962](https://pics.jokeme.top/blogimas/image-20220108040257962.png)
+
+[哔哩哔哩-尚硅谷-生命周期](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=48)
+
 
 
 ## 简单案例
