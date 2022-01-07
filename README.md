@@ -98,6 +98,8 @@ Vue的代理模式,其中先大概了解一下defineProperty的用法:**definePr
 	</div>>
 ```
 
+
+
 ```js
 const vapp = new Vue({
 	methods:{
@@ -153,6 +155,8 @@ eg:
 <input type="text" placeholder="随便写点啥吧!" @keydown.enter=whichOneUInput>
 ```
 
+
+
 ```js
 whichOneUInput(e){
 	console.log(e.target.value)
@@ -195,6 +199,8 @@ computed:{
 	}
 ```
 
+
+
 ```html
 <p>{{fullname}}</p>
 ```
@@ -216,6 +222,8 @@ deep监视不能监视多层数据里面改变前的数据,只能拿到改变后
 ```html
 <button @click="dbqs.tom++">加一</button>
 ```
+
+
 
 ```js
 watch:{
@@ -376,7 +384,15 @@ const shit = new Vue({
 
 同上复习：[w3school](https://www.w3school.com.cn/jsref/jsref_filter.asp)
 
+### 表单收集
 
+[哔哩哔哩-尚硅谷-表单收集](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=38)
+
+![image-20220108002203213](https://pics.jokeme.top/blogimas/image-20220108002203213.png)
+
+### 自定义Vue指令
+
+[哔哩哔哩-尚硅谷-自定义指令](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=46)
 
 
 
@@ -423,6 +439,8 @@ vapp.$mount("#niubi")
     <button @click="turnWeather()">点我</button>
 </div>
 ```
+
+
 
 ```js
 const shit = new Vue({
@@ -611,3 +629,35 @@ shit.$mount("#bobp")
 ![image](https://pics.jokeme.top/typora/image-20211231061310941.png)
 
 咱们来欣赏一下成果吧！暗黑模式真好看，我真厉害😜!
+
+
+
+### 排序案例
+
+接上面的案例继续,如果咱们有一个排序的要求并且是按照uuid或者是姓名来排序的呢?这活应该怎么整?
+
+```js
+computed: {
+userT() {
+		let hugo = this.user.filter((u) => {
+			return u.name.indexOf(this.kw) !== -1
+		})
+		if(this.sortby){
+			hugo.sort((a,b)=>{
+				if(this.sortby == 1){
+					return a.uuid - b.uuid//升序前减后
+				}
+				if(this.sortby == 2){
+					return b.uuid - a.uuid//降序后减前
+				}
+			})
+		}
+		return hugo
+	},
+}
+```
+
+废话也不多说,就这样写,杠杠的! 对搜索后的数据进行排序那是相当的easy了,只需要在查找到的符合条件的数组后面接着写一个排序即可,写完了把排序后的数组再返回出去就可以了.
+
+
+

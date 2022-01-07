@@ -9,7 +9,7 @@
 		}
 		.er {
 			width: 300px;
-			height: 200px;
+			height: 250px;
 			margin: 100px auto;
 			border: 1px rgb(104, 104, 104) solid;
 			border-radius: 10px;
@@ -17,6 +17,7 @@
 		}
 		.ipt{
 			background-color: #3f3f3f;
+			margin:0px 2px;
 		}
 		.ert{
 			width: 80%;
@@ -50,9 +51,12 @@
 	<div class="er" id="kendaman">
 		<div class="ert">
 			<input class="ert ipt" type="text" placeholder="输入以搜索🔍" v-model="kw">
+			<button class="ipt" @click="sortby=1">按UUID升序</button>
+			<button class="ipt" @click="sortby=2">按UUID降序</button>
+			<button class="ipt" @click="sortby=0">原来的顺序</button>
 		</div>
 		<ul class="ert">
-			<li v-for="it in userT" :key="it.uuid"> {{it.name}} </li>
+			<li v-for="it in userT" :key="it.uuid"> {{it.name}} {{it.uuid}} </li>
 		</ul>
 	</div>
 	<script src="vue.js"></script>
@@ -62,12 +66,13 @@
 		const vapp = new Vue({
 			data() {
 				return {
+					sortby:0,//0:默认 1:uuid升序,2:uuid降序
 					kw: '',
 					user: [
-						{ uuid: 123, name: "托塔天王", sex: 0 },
-						{ uuid: 124, name: "斗战胜佛", sex: 1 },
-						{ uuid: 163, name: "净坛使者", sex: 1 },
-						{ uuid: 165, name: "祥龙罗汉", sex: 1 }
+						{ uuid: 163, name: "托塔天王佛", sex: 0 },
+						{ uuid: 144, name: "斗战胜者佛", sex: 1 },
+						{ uuid: 161, name: "净坛使者神", sex: 1 },
+						{ uuid: 110, name: "祥龙罗汉神", sex: 1 }
 					], 
 				}
 			},
@@ -75,11 +80,22 @@
 
 			},
 			computed: {
-				userT() {
-					return this.user.filter((u) => {
+			userT() {
+					let hugo = this.user.filter((u) => {
 						return u.name.indexOf(this.kw) !== -1
 					})
-				}
+					if(this.sortby){
+						hugo.sort((a,b)=>{
+							if(this.sortby == 1){
+								return a.uuid - b.uuid//升序前减后
+							}
+							if(this.sortby == 2){
+								return b.uuid - a.uuid//降序后减前
+							}
+						})
+					}
+					return hugo
+				},
 			}
 			// watch: {
 			// 	kw: {
