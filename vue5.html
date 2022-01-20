@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="stdio" style="text-align: center;">
+        <button @click.once="show">dianwo</button>
+        <hr>
+        <laozhang></laozhang><hr>
+        <ll></ll><hr>
+
+    </div>
+    <script src="vue.js"></script>
+    <script>
+		Vue.config.productionTip = false
+        Vue.config.devtools = false
+        
+        const jokeme = Vue.extend({
+            template:`
+            <div>
+                <p>网站名称: {{webname}} </p>
+                <p>网站地址: {{site}} </p>
+            </div>
+            `,
+            data(){
+                return{
+                    webname: "JokemeBlog",
+                    site:"jokeme.top"                    
+                }
+            }
+        })
+        
+        // 简写形式,只需要为对象即可,以后基本上都是用这种
+        const goofiest = {
+            template:`
+            <div>
+                <p>网站名称: {{webname}} </p>
+                <p>网站地址: {{site}} </p>
+            </div>
+            `,
+            data(){
+                return{
+                    webname: "goofiest",
+                    site:"goofiest.top"                    
+                }
+            }
+        }
+        const vm = new Vue({
+            components:{
+                // 局部注册,Σ(っ °Д °;)っ,只有当前的Vue实例可以使用
+                laozhang:goofiest,// goofiest, 如果前后名字一样,直接写一个也是可以的
+
+                // laoli:jokeme
+            },
+            methods:{
+                show(){
+                    console.log("靓仔你谁呀?")
+                }
+            }
+        })
+        Vue.component("ll",jokeme)//全局注册所有的Vue实例都可以使用
+        vm.$mount("#stdio")
+    </script>
+</body>
+</html>

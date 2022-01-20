@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="stdio">
+        <app></app>
+
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+        Vue.config.devtools = false
+        const WindowsXP ={
+            template:`
+            <div>
+                <h3>OS_Creator: {{creator}} </h3>
+                <h3>OS_Series: {{series}} </h3>
+            </div>
+            `,
+            data(){
+                return{
+                    creator:"MicroSoft",
+                    series:"Windows XP"
+                }
+            },
+        } 
+        const Windows = {
+            template:`
+            <div>
+                <h2>OS_Creator: {{creator}} </h2>
+                <h2>OS_Series: {{series}} </h2>
+                <hr>
+                <WindowsXP/>
+                <hr>
+            </div>
+            `,
+            data(){
+                return{
+                    creator:"MicroSoft",
+                    series:"Windows 10 , Windows 8 , Windows 7 , Windows Vista , Windows XP , Windows 98 , Windows 95"
+                }
+            },
+            components:{
+                WindowsXP
+            }
+        }
+        const linux = {
+            template:`
+            <div>
+                <h2>OS_Creator: {{creator}} </h2>
+                <h2>OS_Series: {{series}} </h2>
+            </div>
+            `,
+            data(){
+                return{
+                    creator:"Linux Open Source Foundation && Linus Trovalods",
+                    series:"Red Hat,Ubuntu,CentOS,Debian,ArchLinux"
+                } 
+            }
+        }
+        
+        const app = {
+            template:`
+            <div>
+                <Windows></Windows>
+                <linux></linux>
+            </div>
+            `,
+            components:{
+                Windows,
+                linux
+            }
+        }
+        // 其实app就是多了一层套娃的结果,让app管理所有的组件,把所有的组件注册的活都放在这里干,vm本身只需要负责注册一个app即可
+        const vm = new Vue({
+            components:{
+                app
+            }
+        })
+        vm.$mount("#stdio")
+    </script>
+</body>
+</html>
