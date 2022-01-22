@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Windows ref="xx" giveup="No" version="19043.1466" ></Windows>
+		<Windows ref="xx" giveup="No" :version="19043.1466" ></Windows>
 		<Linux ref="xxb" ></Linux>
 		<button @click="lsref">lsref</button>
 	</div>

@@ -415,7 +415,145 @@ mounted() {
 
 [哔哩哔哩-尚硅谷-生命周期](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=48)
 
+### components(组件)
 
+Q1：什么是**components(组件)**？
+
+Vue里面的组件其实就是相当于一个小型的Vue实例，Vue可以干的，它也可以，但是它就是不可以直接被`$mount`,换句话说也就是不能有自己的`el:`元素
+
+Q2：如何定义一个组件？
+
+问得好呀！
+
+```js
+//这种是完整写法
+const jokeme = Vue.extend({
+    template:``
+    ... ...
+})
+// 简写形式,只需要为对象即可,以后基本上都是用这种
+const goofiest = {
+    template:`
+    <div>
+        <p>网站名称: {{webname}} </p>
+        <p>网站地址: {{site}} </p>
+    </div>
+    `,
+    data(){
+        return{
+            webname: "goofiest",
+            site:"goofiest.top"                    
+        }
+    }
+}
+```
+
+Q3：定义完了以后咋使用呀？
+
+```js
+const vm = new Vue({
+    components:{
+        // 局部注册,Σ(っ °Д °;)っ,只有当前的Vue实例可以使用
+        laozhang:goofiest,// goofiest, 如果前后名字一样,直接写一个也是可以的
+        // laoli:jokeme
+    },
+    methods:{
+        show(){
+            console.log("靓仔你谁呀?")
+        }
+    }
+})
+Vue.component("ll",jokeme)//全局注册所有的Vue实例都可以使用
+```
+
+### render&&ref
+
+中间几节课简单就没有写代码了，链接在下面
+
+[哔哩哔哩-尚硅谷-render函数](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=63)
+
+[哔哩哔哩-尚硅谷-修改默认配置](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=64)
+
+[哔哩哔哩-尚硅谷-ref属性](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=65)
+
+### props传参
+
+咱们xian在Windows.vue里面定义好下面的props
+
+```js
+props:{
+	giveup:String,
+	version:Number,
+},
+//带有数据校验的接收
+// props:{
+// 	giveup:{
+// 		type:String,
+// 		required:true,
+// 		default:'111'
+// 	}
+// }
+// 这种方式就可以更详细的约定那些是需要的,那些不需要,默认值等等...
+```
+
+然后在App.vue里面的Windows标签传递参数，
+
+```vue
+<Windows ref="xx" giveup="No" :version="19043.1466" ></Windows>
+```
+
+学习课程见：[哔哩哔哩-尚硅谷-props配置](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=66)
+
+### mixin
+
+咱首先需要在main.js同级目录下建一个 **`mixin.js`**的文件
+
+然后文件内容就是：
+
+```js
+const wheseisvc = {
+	data(){
+		return {
+			hell:"dashaz"
+		}
+	},
+	methods:{
+		sch(){
+			console.log("i am here",this.hell);
+			// alert("I am here")
+		}
+	}
+}
+// 在这个文件里可以定义data,methods,watch... vue允许的都可以
+// 可以全局引入mixin方法就是在main.js 里面定义
+// Vue.mixin(whereisvc)
+// 单组件定义就在该组件里面import使用即可
+export default wheseisvc;
+```
+
+写完了以后一定要**export**出去，要不然导入的时候会报错的
+
+```vue
+<template>
+<h2 @click.once="sch">OS_Creator: {{creator}} </h2>
+</template>
+
+<script>
+import whereisvc from "../mixin"
+<script>
+```
+
+就在标签里面可以直接调用**mixin**里面定义好的方法了
+
+学习课程见：[哔哩哔哩-尚硅谷-mixin](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=67)
+
+### plugins&&scoped
+
+我也没有写代码，学习课程在下面
+
+[哔哩哔哩-尚硅谷-插件](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=68)
+
+[哔哩哔哩-尚硅谷-scoped](https://www.bilibili.com/video/BV1Zy4y1K7SH?p=69)
 
 ## 简单案例
 
@@ -431,7 +569,14 @@ mounted() {
 
 ```
 
-```js
+
+
+```vue
+<html>
+    ...
+	<laozhang></laozhang>
+	<ll></ll>
+</html>
 <script>
 const vapp = new Vue({
 	data(){
@@ -449,6 +594,8 @@ const vapp = new Vue({
 vapp.$mount("#niubi")
 </script>
 ```
+
+
 
 ### 天气案例
 
@@ -679,6 +826,42 @@ userT() {
 ```
 
 废话也不多说,就这样写,杠杠的! 对搜索后的数据进行排序那是相当的easy了,只需要在查找到的符合条件的数组后面接着写一个排序即可,写完了把排序后的数组再返回出去就可以了.
+
+
+
+# 2. npm基础
+
+npm是node.js的一个包管理器,有点像pip,咱们在学Vue以后是需要vue-cli来操作的create,build...
+
+首先安装node！不管是用apt、yum。还是手动下载安装包配置环境变量都可以，装上能有node环境就可以了
+
+安装完node以后呢，由于默认的服务器在国外，咱们下载包会非常的慢，所以！换源！
+
+```sh
+npm config set registry https://registry.npm.taobao.org
+```
+
+或者直接使用**[cnpm](https://npmmirror.com/)**替代npm
+
+接着就可以安装Vue了，咱们这里全局安装：
+
+```sh
+ npm install -g @vue/cli
+```
+
+安装完Vue就可以创建咱们的第一个项目了
+
+```sh
+vue create xxx
+```
+
+创建完Vue项目以后，最后一行会提示你`cd xxx ；npm run serve`
+
+按照命令来就可以了
+
+就可以在浏览器看到项目了
+
+# 3. todolist项目
 
 
 
