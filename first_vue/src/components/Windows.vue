@@ -2,8 +2,9 @@
 	<div>
 		<h2>OS_Creator: {{creator}} </h2>
 		<h2>OS_Series: {{series}} </h2>
+		<h3> {{giveup}}.{{version}} </h3>
 		<hr>
-		<WindowsXP></WindowsXP>
+		<WindowsXP on="365Buy" off="365NotBuy" ></WindowsXP>
 		<hr>
 	</div>
 </template>
@@ -21,6 +22,13 @@ export default {
 	},
 	components:{
 		WindowsXP
+	},
+	props:{
+		giveup:String,
+		version:Number,
 	}
+	//带有数据校验的接收
+	
+
 }
 </script>
