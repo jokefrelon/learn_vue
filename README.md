@@ -478,7 +478,7 @@ Vue.component("ll",jokeme)//全局注册所有的Vue实例都可以使用
 
 ### props传参
 
-咱们xian在Windows.vue里面定义好下面的props
+咱们先:在Windows.vue里面定义好下面的props
 
 ```js
 props:{
