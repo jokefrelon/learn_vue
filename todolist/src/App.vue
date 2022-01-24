@@ -1,22 +1,22 @@
 <template>
   <div class="edge">
     <ipt :adddolist="adddolist"></ipt>
-    <todoitem :itemlist="dolist" :delt="delt"></todoitem>
-    <!-- <status></status> -->
+    <todoitem :itemlist="dolist" :delt="delt" :setstatus="setstatus"></todoitem>
+    <status :itemlistSta="dolist"></status>
   </div>
 </template>
 
 <script>
 import ipt from "./components/input";
 import todoitem from "./components/todoitem";
-// import status from './components/status'
+import status from "./components/status";
 
 export default {
   name: "App",
   components: {
     ipt,
     todoitem,
-    // status
+    status
   },
   data() {
     return {
@@ -32,14 +32,19 @@ export default {
     },
 		delt(uid){
 			for(var er = 0;er<this.dolist.length;er++){
-				console.log(this.dolist[er].uuid);
 				if (this.dolist[er].uuid == uid) {
-					console.log(this.dolist[er]);
 					this.dolist.shift(this.dolist[er])
 					break;
 				}
 			}
 			
+		},
+		setstatus(uid){
+			for (let er = 0; er < this.dolist.length; er++){
+				if(this.dolist[er].uuid == uid){
+					this.dolist[er].done = !(this.dolist[er].done)
+				}
+			}
 		}
   },
   mounted() {

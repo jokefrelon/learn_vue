@@ -9,7 +9,7 @@ export default {
 	data() {
 		return {
 			ipt:"ipt-day",
-			pleaseholder:"Please enter someting todo"
+			pleaseholder:"你想干啥?"
 		}
 	},
 	props:["adddolist"],
@@ -20,12 +20,10 @@ export default {
 			} else {
 				const abcd = Math.floor(Math.random()*1000+1)
 				const fna ={"uuid":abcd,"thing":e.target.value,"done":false}
-				console.log(abcd);
 				this.adddolist(fna)
-				console.log(this);
 				e.target.value = ""
 			}
-		}
+		},
 	},
 	watch:{
 		ipt:{
@@ -63,7 +61,7 @@ export default {
 		outline: none;
 	}
 	#commom input:focus{
-		border: 1px solid #00718d;
+		border: 1px solid lightskyblue;
 		outline:none;
 	}
 	.ipt-day{

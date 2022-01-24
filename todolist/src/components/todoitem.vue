@@ -2,7 +2,7 @@
 	<div :class="sus"  id="todoit" v-show="itemlist.length != 0" >
 		<div class="fir" v-for="item in itemlist" :key="item.uuid">
 			<div>
-				<label>
+				<label @click="checkstat($event,item.uuid)">
 					<input type="checkbox" :checked="item.done">
 					<span>{{item.thing}} </span>
 				</label>
@@ -19,11 +19,16 @@ export default {
 			sus:"item-sur-day"
 		}
 	},
-	props:['itemlist',"delt"],
+	props:['itemlist',"delt","setstatus"],
 	methods:{
 		deletet(uuid){
-			console.log("我删除啦",uuid)
 			this.delt(uuid)
+		},
+		checkstat(ele,uid){
+			if(ele.target.tagName == "SPAN"){
+				return 
+			}
+			this.setstatus(uid)
 		}
 	},
 	watch:{
@@ -59,11 +64,10 @@ export default {
 		margin-left: auto;
 		margin-right: auto;
 		position: relative;
-		border:3px solid #999;
 		margin-bottom: 10px;
 		margin-top: 10px;
 		border-radius: 3px;
-		box-shadow: 1px 1px 5px #aaa,-1px -1px 5px #3a3a3a;
+		box-shadow: 1px 1px 5px #aaa,-1px -1px 5px #333;
 		border:1px solid #aaa;
 	}
 	
