@@ -478,7 +478,7 @@ Vue.component("ll",jokeme)//全局注册所有的Vue实例都可以使用
 
 ### props传参
 
-咱们先:在Windows.vue里面定义好下面的props
+咱们先在Windows.vue里面定义好下面的props
 
 ```js
 props:{
@@ -861,7 +861,208 @@ vue create xxx
 
 就可以在浏览器看到项目了
 
-# 3. todolist项目
+# 3. todolist(一代目)
+
+首先是项目拆分,看看todolist可以怎么样拆,
+
+我是把项目拆分为三个模块的:`input,itenlist.status`
+
+
+
+## 1. App.vue
+
+这个组件也就是用来调度所有的VC，所以在`<script>`里面先导入三个子组件，并且在`components`里面注册三个组件
+
+```vue
+<script>
+import ipt from "./components/input";
+import todoitem from "./components/todoitem";
+import status from "./components/status";
+
+export default {
+  name: "App",
+  components: {
+    ipt,
+    todoitem,
+    status
+  },
+}
+</script>
+```
+
+其次就是`methods`这里面的方法大都是配合与子组件通信用的。做法都是把函数定义在父组件里面，通过子组件的调用来达到传参的目的，这种做法算是最最最基础原始的做法。但是缺点也很明显如果 `父 -> 孙`就太麻烦了，需要`父 -> 子；子 -> 孙`。耦合性太高了，如果需要改动代码，那就即将是一件非常痛苦的事情。但是以我目前的水平也就只能写出这样的扣脚代码！但是咱不急！等着后面二代目，三代目版本的慢慢优化吼！
+
+```vue
+<script>
+methods: {
+		//添加待办事项的
+		// 配合input.vue组件的使用,在这里定义好函数,然后再在input里面调用达到input->App传递数据的目的
+    adddolist(e) {
+      this.dolist.unshift(e);
+    },
+		// 删除项目 原理同上
+		delt(uid){
+			for(var er = 0;er<this.dolist.length;er++){
+				if (this.dolist[er].uuid == uid) {
+					this.dolist.splice(er, 1);
+					break;
+				}
+			}
+		},
+		// 标记项目已完成 原理同上
+		setstatus(uid){
+			for (let er = 0; er < this.dolist.length; er++){
+				if(this.dolist[er].uuid == uid){
+					this.dolist[er].done = !(this.dolist[er].done)
+				}
+			}
+		}
+  },
+</script>
+```
+
+再来看`<template>`标签，这里面都是**App**向其子组件传递的数据、函数
+
+```vue
+<template>
+  <div class="edge">
+    <ipt :adddolist="adddolist"></ipt>
+    <todoitem :itemlist="dolist" :delt="delt" :setstatus="setstatus"></todoitem>
+    <status :itemlistSta="dolist"></status>
+  </div>
+</template>
+```
+
+## 2. input.vue
+
+这个组件就是来完成输入的整体功能是相当的简单🍳，咱们先来看看`<template>`标签，就一个`<div>`包裹着`<input>`但是这个input有一个键盘⌨监听事件“**addItem**”，可在用户按下enter时执行函数。
+
+```vue
+<template>
+	<div :class="ipt" id="commom">
+		<input type="text" :placeholder="pleaseholder" @keydown.enter="addItem">
+	</div>
+</template>
+```
+
+接下来咱再来看看`<script>`里面写了啥
+
+>data:定义了placeholder，可以让我们自己去动态的更新！很人性！
+
+>props:接收`adddolist`函数。
+
+>methods:就是添加数据的时候不允许空值，然后把数据打包成数据发给父组件，最后清空一下value就大功告成了
+
+>watch:自动根据时间切换黑暗模式
+
+
+```vue
+<script>
+export default {
+	data() {
+		return {
+			ipt:"ipt-day",
+			pleaseholder:"你想干啥?"
+		}
+	},
+	props:["adddolist"],
+	methods: {
+		addItem(e){
+			if (e.target.value == "") {
+				alert("不允许输入空值哦!")				
+			} else {
+				const abcd = Math.floor(Math.random()*1000+1)
+				const fna ={"uuid":abcd,"thing":e.target.value,"done":false}
+				this.adddolist(fna)
+				e.target.value = ""
+			}
+		},
+	},
+	watch:{
+		ipt:{
+			immediate:true,
+			handler(){
+				let ho = new Date().getHours()
+				if (ho >= 7 && ho < 18) {
+					this.ipt="ipt-day"
+				} else {
+					this.ipt="ipt-night"
+				}
+			}
+		}
+	}
+}
+</script>
+```
+
+## 3. todoitem.vue
+
+```vue
+<template>
+	<div :class="sus"  id="todoit" v-show="itemlist.length != 0" >
+		<div class="fir" v-for="item in itemlist" :key="item.uuid">
+			<div>
+				<label @click="checkstat($event,item.uuid)">
+					<input type="checkbox" :checked="item.done">
+					<span>{{item.thing}} </span>
+				</label>
+				<button @click="deletet(item.uuid)">删除</button> 
+			</div>
+		</div>
+	</div>
+</template>
+```
+
+首先就是`v-show="itemlist.length != 0"`在没有数据的情况下不会显示该项。其次`v-for="item in itemlist"`利用**v-for**渲染待办事项。然后就是利用`<label>`标签来提升一下用户体验，一个checkbox类型的input来标识是否完成
+
+```vue
+<script>
+export default {
+	data(){
+		return {
+			sus:"item-sur-day"
+		}
+	},
+	props:['itemlist',"delt","setstatus"],
+	methods:{
+        //删除待办
+		deletet(uuid){
+			this.delt(uuid)
+		},
+        //完成待办，
+		checkstat(ele,uid){
+			if(ele.target.tagName == "SPAN"){
+				return 
+			}
+			this.setstatus(uid)
+		}
+	},
+	watch:{
+		sus:{
+			immediate:true,
+			handler(){
+				let ho = new Date().getHours()
+				if (ho >= 7 && ho < 18) {
+					this.sus="item-sur-day"
+				} else {
+					this.sus="item-sur-night"
+				}
+			}
+		},
+	}
+}
+</script>
+```
+
+## 4. status.vue
+
+其实这个没有啥好说的，代码里面都是浅显易懂的东西！主要就是统计一共有几个待办事项，已完成几个。还有和父组件的参数传递
+
+
+
+
+
+
 
 
 
