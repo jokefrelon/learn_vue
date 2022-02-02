@@ -30,7 +30,7 @@
       data-index="index"
       class="childtab"
     >
-      <div class="boox" @mouseover ="showul(index)" @mouseout="disshowul(index)" @focusout ="disshowul(index)">
+      <div class="boox" @mouseover ="showul(index)" @mouseout="disshowul(index)" @blur ="disshowul(index)">
         <span>{{ its.name }}</span>
         <ul v-show="ishover" ref="blk">
           <a href="http://192.168.31.100:8081/"><li v-for="lol in its.cont" :key="lol">{{ lol }}</li></a>
