@@ -1096,3 +1096,117 @@ export default {
 					然后在我们需要兄弟、父子之间传递数据的时候就可以直接调用方法了/应该是这样
 					this.$bus.$emit("delt", uuid);
 ```
+
+## Vuex
+
+vuex是被设计出来用于组件之间相互通信的，咱先介绍大概使用方法再说具体的内部构造
+
+1. 先编写`store.js`配置文件，
+
+```js
+import Vue from 'vue'
+import vuex from 'vuex'
+
+// 使用vuex 如果在main.js里面**use**会报错的，固在此处使用
+Vue.use(vuex)
+
+// 创建actions{} 响应动作
+const actions = {
+	destroyPlant(context){
+		context.commit('realDestory')
+	}
+}
+// 创建mutations{} 操作数据
+const mutations = {
+	realDestory(){
+		alert("想好了哈！没后悔药！摧毁后就真的没有了")
+		this.state.sta = []
+		console.log("已经删除所有的小星星了！江湖再见！");
+	}
+}
+// 创建state 存储数据
+const state = {
+	sta:["SHNK-78-098-UUFMGS","SJUIO-44-89-SJHGKJ","JKYSDU-45-06-UGSLSS","GSKAZ-80-21-GOADU","UIOSAP-89-08-UUSIPO"],
+	nw:0
+}
+// 创建getters（类似计算属性）
+const getters = {
+	syst(state){
+		return state.nw+31
+	}
+}
+const store = new vuex.Store({
+	actions,
+	mutations,
+	state，
+	getters
+})
+export default store
+```
+
+2. 在main.js里面启用store.js
+
+```js
+import store from './store'
+```
+
+3. 在组件里面调用store里面的方法
+
+```js
+methods:{
+	dest(){
+		this.$store.dispatch('destroyPlant')
+	},
+}
+```
+
+当然也可以像下面这样写
+
+```vue
+<template>
+  <div>
+    <p>这是当前已知最新小行星: {{ $store.state.sta[$store.state.nw] }}</p>
+    <button @click="nextp">下一颗小星星星星</button>
+    <button @click="tofirst">第一颗小星星🎀</button>
+    <button @click="dest">摧毁小星星</button><br />
+    <p>
+      添加一颗小星星:
+      <input v-model="inp" type="text" @keydown.enter="addplant" />
+    </p>
+    <hr />
+    <p>已知小行星: {{ $store.state.sta }}</p>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      inp: "",
+    };
+  },
+  methods: {
+    nextp() {
+      if (this.$store.state.nw + 1 == this.$store.state.sta.length) {
+        alert("最后一颗小星星啦!⭐");
+      } else {
+        this.$store.state.nw += 1;
+      }
+    },
+    addplant() {
+      this.$store.state.sta.unshift(this.inp);
+      this.$store.state.nw = 0;
+      this.inp = "";
+    },
+    tofirst() {
+      this.$store.state.nw = 0;
+		},
+		// 实际开发中不建议上面👆三种写法，这样不好，devtools不能捕获mutations里面的方法
+		// 下面的写法才是推荐写法
+		dest(){
+			this.$store.dispatch('destroyPlant')
+		},
+  },
+};
+</script>
+```
